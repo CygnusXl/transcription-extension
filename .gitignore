@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# Data and models are large; keep them out of git
+data/*
+!data/.gitkeep
+models/*
+!models/.gitkeep
+*.sqlite3
+
+# Extension packaging output
+*.zip
+node_modules/
+.DS_Store

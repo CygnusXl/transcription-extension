@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font-family: Roboto, Arial, sans-serif; width: 280px; padding: 12px; font-size: 13px; }
+      label { display: block; margin-top: 10px; font-weight: 600; }
+      select, input[type="range"] { width: 100%; }
+      .row { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+      #health { margin-top: 12px; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="row"><input type="checkbox" id="enabled" /><b>Enable live transcript</b></div>
+    <div class="row"><input type="checkbox" id="subtitlesEnabled" /><span>Subtitles on video</span></div>
+
+    <label>Subtitle content</label>
+    <select id="subtitleMode">
+      <option value="original">Original</option>
+      <option value="translation">Translation</option>
+      <option value="both">Original + translation</option>
+    </select>
+
+    <label>Source language</label>
+    <select id="sourceLang">
+      <option value="auto">Auto-detect</option>
+      <option value="en">English</option>
+      <option value="id">Indonesian</option>
+      <option value="ja">Japanese</option>
+      <option value="ko">Korean</option>
+      <option value="zh">Chinese</option>
+      <option value="es">Spanish</option>
+      <option value="de">German</option>
+    </select>
+
+    <label>Target language</label>
+    <select id="targetLang">
+      <option value="en">English</option>
+      <option value="id">Indonesian</option>
+      <option value="ja">Japanese</option>
+      <option value="ko">Korean</option>
+      <option value="zh">Chinese</option>
+      <option value="es">Spanish</option>
+      <option value="de">German</option>
+    </select>
+
+    <label>Font size</label>
+    <input type="range" id="fontSize" min="14" max="40" />
+
+    <label>Background opacity</label>
+    <input type="range" id="backgroundOpacity" min="0" max="1" step="0.05" />
+
+    <label>Position</label>
+    <select id="position">
+      <option value="bottom">Bottom</option>
+      <option value="top">Top</option>
+    </select>
+
+    <div id="health">Backend: checking...</div>
+    <script src="popup.js"></script>
+  </body>
+</html>

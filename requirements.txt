@@ -1,0 +1,15 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+websockets>=12.0
+numpy>=1.26
+# Stage 3 (ASR): uncomment when implementing
+# faster-whisper>=1.0
+# Stage 5 (translation)
+# transformers>=4.40
+# sentencepiece
+# Stage 6 (evaluation)
+# jiwer>=3.0
+# datasets>=2.19
+# soundfile
+# librosa
+pytest>=8.0
