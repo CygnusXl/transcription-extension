@@ -1,3 +1,5 @@
+> **Note (added after checking the official course form):** this brief was written before the form was reviewed. Where they conflict, the form wins. Known differences: (1) the brief says AI is capped at 50%, but the form marks AI Use Type **Integrated** with no cap; (2) the brief's report outline is shorter than the form's required structure, so use `REPORT_OUTLINE.md`; (3) the form says the input is a continuous microphone/audio stream and lists WER/CER. See `REQUIREMENTS_CHECKLIST.md`.
+
 Yes. The prompt should make **two things non-negotiable**:
 
 1. **It must be a Chrome Extension**, not merely a standalone Python application.

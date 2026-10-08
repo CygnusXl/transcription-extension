@@ -10,7 +10,7 @@ YouTube tab audio -> Extension -> WebSocket -> localhost Python backend -> local
 YouTube page UI (sidebar + subtitle overlay) <- WebSocket <- partial/final transcript
 ```
 
-The full assignment brief is in [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md).
+The working brief is in [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md). Where it differs from the official course form, **the form wins**: see [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) and [`docs/REPORT_OUTLINE.md`](docs/REPORT_OUTLINE.md).
 
 ## Status
 
@@ -82,4 +82,4 @@ Server to client: `{"type":"transcript","id":N,"start":12.3,"end":15.1,"text":".
 
 ## AI usage
 
-AI assistance is logged in [`docs/AI_USAGE_LOG.md`](docs/AI_USAGE_LOG.md). Every AI-generated item must be verified by the student, and AI must not produce experimental results or user-study data.
+The course form sets **AI Use Type: Integrated**: AI is allowed, but every material use must be logged ([`docs/AI_USAGE_LOG.md`](docs/AI_USAGE_LOG.md)), verified by the student, and explainable at the demo. AI must not produce experimental results, WER/latency numbers, or user-study data. The report must end with the AI Usage Declaration.
