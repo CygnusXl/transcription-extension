@@ -2,14 +2,21 @@ fastapi>=0.110
 uvicorn[standard]>=0.29
 websockets>=12.0
 numpy>=1.26
-# Stage 3 (ASR): uncomment when implementing
-# faster-whisper>=1.0
-# Stage 5 (translation)
-# transformers>=4.40
-# sentencepiece
-# Stage 6 (evaluation)
+
+# Local ASR
+faster-whisper>=1.0
+
+# Local translation (NLLB-200). For GPU, install the CUDA build of torch first: https://pytorch.org/get-started/locally/
+torch>=2.2
+transformers>=4.40
+sentencepiece
+
+# Tests
+pytest>=8.0
+httpx>=0.27
+
+# Stage 6 (evaluation), install when needed
 # jiwer>=3.0
-# datasets>=2.19
 # soundfile
 # librosa
-pytest>=8.0
+# datasets>=2.19

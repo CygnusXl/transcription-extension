@@ -11,9 +11,9 @@ Status key: **Done** = exists in repo and verified; **Scaffolded** = skeleton on
 | --- | --- | --- |
 | Real-world problem | Planned | Foreign-language lecture videos are hard to follow/review; write it up in report section 1 |
 | Real target user | Student | Make it concrete (see "Target user" below) and recruit real people |
-| Speech recognition application | Scaffolded | Extension + backend skeleton; ASR not built yet (Stage 3) |
-| Works in real time | Planned | Needs tabCapture + streaming ASR; must show partial then updated text |
-| Local ASR inference | Planned | faster-whisper on the RTX 3060 Ti; no cloud ASR |
+| Speech recognition application | Implemented | Extension + backend. Verified in a dev sandbox; you must verify on your machine and on a real YouTube tab |
+| Works in real time | Implemented | Partial then final text seen with a real model. Latency on your GPU not measured yet |
+| Local ASR inference | Implemented | faster-whisper (and local NLLB translation). Needs a run on your RTX 3060 Ti |
 | No external ASR API | Done (by design) | Nothing in the repo calls a cloud ASR service |
 | Technical evaluation | Planned | Baseline + at least one experimental condition |
 | User testing | Student | At least 5 real target users |
@@ -26,12 +26,12 @@ Status key: **Done** = exists in repo and verified; **Scaffolded** = skeleton on
 
 | Requirement | Status | Notes |
 | --- | --- | --- |
-| Continuous audio stream as input | Planned | Tab audio via `chrome.tabCapture` + offscreen document. See risk 1 |
-| Streaming + preprocessing (16 kHz mono) | Planned | AudioWorklet downsampling |
-| Inference while speech is ongoing | Planned | Sliding window, no full-recording step |
-| Partial then updated transcription | Planned | Wire protocol already has `final: false/true` |
-| Transcript displayed live | Scaffolded | Sidebar + overlay exist; verify in Chrome |
-| Show latency and status in the UI | Planned | The form's example UI shows "Latency: 0.8 s" and "Status: Listening"; add both to the sidebar |
+| Continuous audio stream as input | Implemented, unverified on real YouTube | Tab audio via `chrome.tabCapture` + offscreen document (the tabCapture call itself could not be exercised without a real user gesture). See risk 1 |
+| Streaming + preprocessing (16 kHz mono) | Done | AudioWorklet downmix + resample, unit-tested in Node |
+| Inference while speech is ongoing | Done | Sliding window re-transcribed every step; no full-recording step |
+| Partial then updated transcription | Done | LocalAgreement-2: tentative words shown as partial, stable words committed |
+| Transcript displayed live | Done in test page | Sidebar + overlay verified on a stand-in YouTube page; verify on real YouTube |
+| Show latency and status in the UI | Done | Sidebar shows status (Listening, Loading model, ...) and live "Latency: x s" |
 | Explain latency/responsiveness in report | Planned | Needs measured data |
 
 ## Experiments (sections 12-14)

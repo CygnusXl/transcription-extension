@@ -1,64 +1,50 @@
 """Local backend: FastAPI + WebSocket.
 
-Stage 2: health endpoint and a WebSocket that accepts the extension's hello message
-and binary PCM frames. Stage 3 will route audio into streaming_asr.StreamingASR.
+    uvicorn backend.main:app --host 127.0.0.1 --port 8765
+
+Only bind to localhost. Browser pages other than this extension are refused on /ws, so a random
+website cannot use your GPU through the socket.
 """
 from __future__ import annotations
 
-import json
 import logging
 import time
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 
-from .database import init_db
+from . import database
+from .models import Models
+from .session import Session
 
-log = logging.getLogger("backend")
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="Transcription Extension Backend")
 
-# The extension talks to localhost only; allow its origin for HTTP health checks.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET"],
-    allow_headers=["*"],
-)
+def create_app(models: Models | None = None) -> FastAPI:
+    models = models or Models()
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI):
+        database.init_db()
+        yield
+
+    app = FastAPI(title="Transcription Extension Backend", lifespan=lifespan)
+    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"])
+
+    @app.get("/health")
+    def health() -> dict:
+        return {"status": "ok", "time": time.time(), **models.info()}
+
+    @app.websocket("/ws")
+    async def ws_endpoint(ws: WebSocket) -> None:
+        origin = ws.headers.get("origin")
+        if origin and not origin.startswith("chrome-extension://"):
+            await ws.close(code=1008)  # policy violation: only the extension may connect
+            return
+        await Session(ws, models).run()
+
+    return app
 
 
-@app.on_event("startup")
-def _startup() -> None:
-    init_db()
-
-
-@app.get("/health")
-def health() -> dict:
-    # asr_model is None until Stage 3 loads a model.
-    return {"status": "ok", "asr_model": None, "time": time.time()}
-
-
-@app.websocket("/ws")
-async def ws_endpoint(ws: WebSocket) -> None:
-    await ws.accept()
-    session: dict = {}
-    bytes_received = 0
-    try:
-        while True:
-            message = await ws.receive()
-            if message.get("type") == "websocket.disconnect":
-                break
-            if message.get("text") is not None:
-                data = json.loads(message["text"])
-                if data.get("type") == "hello":
-                    session = data
-                    log.info("session started: %s", session)
-                    await ws.send_json({"type": "ack", "videoId": data.get("videoId")})
-            elif message.get("bytes") is not None:
-                # Stage 3: feed PCM16 16 kHz mono frames to the streaming ASR.
-                bytes_received += len(message["bytes"])
-    except WebSocketDisconnect:
-        pass
-    finally:
-        log.info("session ended (%s bytes of audio received)", bytes_received)
+app = create_app()

@@ -3,23 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      body { font-family: Roboto, Arial, sans-serif; width: 280px; padding: 12px; font-size: 13px; }
+      :root { color-scheme: light dark; }
+      body { font-family: Roboto, Arial, sans-serif; width: 300px; padding: 12px; font-size: 13px; margin: 0; }
+      h1 { font-size: 14px; margin: 0 0 8px; }
       label { display: block; margin-top: 10px; font-weight: 600; }
-      select, input[type="range"] { width: 100%; }
-      .row { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
-      #health { margin-top: 12px; font-size: 12px; }
+      select, input[type="range"] { width: 100%; box-sizing: border-box; }
+      .row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+      button { width: 100%; padding: 8px; font-size: 14px; border-radius: 8px; border: 0; cursor: pointer; margin-top: 8px; }
+      #start { background: #1a73e8; color: #fff; }
+      #stop { background: #d93025; color: #fff; display: none; }
+      #state { margin-top: 8px; font-size: 12px; }
+      #msg { color: #d93025; font-size: 12px; margin-top: 6px; min-height: 14px; }
+      #health { margin-top: 10px; font-size: 12px; opacity: 0.8; }
+      hr { border: 0; border-top: 1px solid #8884; margin: 12px 0 0; }
     </style>
   </head>
   <body>
-    <div class="row"><input type="checkbox" id="enabled" /><b>Enable live transcript</b></div>
-    <div class="row"><input type="checkbox" id="subtitlesEnabled" /><span>Subtitles on video</span></div>
-
-    <label>Subtitle content</label>
-    <select id="subtitleMode">
-      <option value="original">Original</option>
-      <option value="translation">Translation</option>
-      <option value="both">Original + translation</option>
-    </select>
+    <h1>Live transcript for YouTube</h1>
+    <button id="start">Start transcribing this tab</button>
+    <button id="stop">Stop</button>
+    <div id="state">Not running.</div>
+    <div id="msg"></div>
 
     <label>Source language</label>
     <select id="sourceLang">
@@ -33,6 +37,7 @@
       <option value="de">German</option>
     </select>
 
+    <div class="row"><input type="checkbox" id="translate" /><label for="translate" style="margin:0">Translate</label></div>
     <label>Target language</label>
     <select id="targetLang">
       <option value="en">English</option>
@@ -44,12 +49,18 @@
       <option value="de">German</option>
     </select>
 
+    <hr />
+    <div class="row"><input type="checkbox" id="subtitlesEnabled" /><label for="subtitlesEnabled" style="margin:0">Subtitles on the video</label></div>
+    <label>Subtitle content</label>
+    <select id="subtitleMode">
+      <option value="original">Original</option>
+      <option value="translation">Translation</option>
+      <option value="both">Original + translation</option>
+    </select>
     <label>Font size</label>
     <input type="range" id="fontSize" min="14" max="40" />
-
     <label>Background opacity</label>
     <input type="range" id="backgroundOpacity" min="0" max="1" step="0.05" />
-
     <label>Position</label>
     <select id="position">
       <option value="bottom">Bottom</option>
