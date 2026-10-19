@@ -145,7 +145,7 @@
   function renderOverlay(seg, now) {
     const el = ensureOverlay();
     if (!el) return;
-    if (!settings.subtitlesEnabled || !seg || now > seg.end + 3) {
+    if (settings.subtitlesEnabled === false || !seg || now > seg.end + 3) {
       el.style.display = "none";
       return;
     }

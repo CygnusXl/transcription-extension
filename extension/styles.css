@@ -54,6 +54,7 @@
   text-align: center;
   white-space: pre-line;
   pointer-events: none;
-  z-index: 60;
+  z-index: 2147483000; /* above YouTube's own player layers */
+  line-height: 1.35;
   display: none;
 }

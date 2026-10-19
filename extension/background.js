@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS = {
   translate: true,
   sourceLang: "auto",
   targetLang: "en",
-  subtitlesEnabled: false,
+  subtitlesEnabled: true,
   subtitleMode: "original", // original | translation | both
   fontSize: 22,
   position: "bottom", // bottom | top
