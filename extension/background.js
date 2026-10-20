@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS = {
   subtitleMode: "original", // original | translation | both
   fontSize: 22,
   position: "bottom", // bottom | top
-  backgroundOpacity: 0.6,
+  backgroundOpacity: 0.35,
 };
 
 chrome.runtime.onInstalled.addListener(async () => {

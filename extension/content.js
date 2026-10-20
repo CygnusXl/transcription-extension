@@ -59,6 +59,7 @@
     el = document.createElement("div");
     el.id = OVERLAY_ID;
     player.appendChild(el);
+    enableDrag(el);
     return el;
   }
 
@@ -158,9 +159,61 @@
     el.textContent = lines.join("\n");
     el.style.display = lines.length ? "block" : "none";
     el.style.fontSize = `${settings.fontSize || 22}px`;
-    el.style.background = `rgba(0,0,0,${settings.backgroundOpacity ?? 0.6})`;
-    el.style.top = settings.position === "top" ? "8%" : "auto";
-    el.style.bottom = settings.position === "top" ? "auto" : "8%";
+    // 0 = fully transparent background (text keeps an outline so it stays readable).
+    el.style.background = `rgba(0,0,0,${settings.backgroundOpacity ?? 0.35})`;
+    if (!dragging) {
+      const x = settings.subtitleX, y = settings.subtitleY;
+      if (typeof x === "number" && typeof y === "number") {
+        // Position the user dragged it to (percent of the player).
+        el.style.left = `${x}%`;
+        el.style.top = `${y}%`;
+        el.style.bottom = "auto";
+        el.style.transform = "translate(-50%, -50%)";
+      } else {
+        el.style.left = "50%";
+        el.style.transform = "translateX(-50%)";
+        el.style.top = settings.position === "top" ? "8%" : "auto";
+        el.style.bottom = settings.position === "top" ? "auto" : "8%";
+      }
+    }
+  }
+
+  // Drag the subtitle anywhere on the video; double-click puts it back at the default position.
+  let dragging = false;
+  function enableDrag(el) {
+    if (el.dataset.txeDrag) return;
+    el.dataset.txeDrag = "1";
+    const stop = (e) => e.stopPropagation(); // do not pause/play the video
+    el.addEventListener("click", stop);
+    el.addEventListener("dblclick", (e) => {
+      e.stopPropagation();
+      chrome.storage.sync.remove(["subtitleX", "subtitleY"]);
+    });
+    el.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const player = el.parentElement.getBoundingClientRect();
+      dragging = true;
+      el.setPointerCapture(e.pointerId);
+      const move = (ev) => {
+        const x = Math.min(95, Math.max(5, ((ev.clientX - player.left) / player.width) * 100));
+        const y = Math.min(95, Math.max(5, ((ev.clientY - player.top) / player.height) * 100));
+        el.style.left = `${x}%`;
+        el.style.top = `${y}%`;
+        el.style.bottom = "auto";
+        el.style.transform = "translate(-50%, -50%)";
+        el.dataset.x = x;
+        el.dataset.y = y;
+      };
+      const up = () => {
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerup", up);
+        dragging = false;
+        if (el.dataset.x) chrome.storage.sync.set({ subtitleX: Number(el.dataset.x), subtitleY: Number(el.dataset.y) });
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerup", up);
+    });
   }
 
   // ---------- backend messages ----------
