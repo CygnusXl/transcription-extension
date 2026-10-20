@@ -17,6 +17,7 @@ const DEFAULT_SETTINGS = {
   subtitlesEnabled: true,
   subtitleMode: "original", // original | translation | both
   fontSize: 22,
+  textColor: "#ffffff",
   position: "bottom", // bottom | top
   backgroundOpacity: 0.35,
 };

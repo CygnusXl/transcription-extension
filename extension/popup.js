@@ -5,6 +5,7 @@ const FIELDS = [
   "subtitlesEnabled",
   "subtitleMode",
   "fontSize",
+  "textColor",
   "backgroundOpacity",
   "position",
 ];

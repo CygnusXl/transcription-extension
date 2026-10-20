@@ -159,6 +159,12 @@
     el.textContent = lines.join("\n");
     el.style.display = lines.length ? "block" : "none";
     el.style.fontSize = `${settings.fontSize || 22}px`;
+    el.style.color = settings.textColor || "#ffffff";
+    // Dark outline for light text, light outline for dark text, so it stays readable on any background.
+    el.style.textShadow =
+      (settings.textColor || "#ffffff") === "#000000"
+        ? "0 0 3px #fff, 0 0 3px #fff, 1px 1px 2px #fff"
+        : "0 0 3px #000, 0 0 3px #000, 1px 1px 2px #000";
     // 0 = fully transparent background (text keeps an outline so it stays readable).
     el.style.background = `rgba(0,0,0,${settings.backgroundOpacity ?? 0.35})`;
     if (!dragging) {
